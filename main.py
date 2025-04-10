@@ -1,4 +1,4 @@
-from pyrogram.errors.exceptions.bad_request_400 import StickerEmojiInvalid 
+iofrom pyrogram.errors.exceptions.bad_request_400 import StickerEmojiInvalid 
 import requests
 import m3u8
 import json
@@ -52,7 +52,6 @@ async def account_login(bot: Client, m: Message):
     await m.reply_text('''🎉 <b>Welcome to DRM Bot! </b>🎉
     
 <b>You can have access to download all Non-DRM+Decrypted DRM Bot 🔐 including:</b>
-<blockquote><i>
    • 📚 Appx Zip
    • 🎓 Classplus DRM+ NDRM
    • 🧑‍🏫 PhysicsWallah DRM
