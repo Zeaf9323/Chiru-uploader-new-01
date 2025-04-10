@@ -65,31 +65,8 @@ async def account_login(bot: Client, m: Message):
    • 🎓 Visionias Protection
    • 🎓 Zoom Video
    • 🎓 All Non DRM+DEC DRM
-   • 🎓 MPD URLs if the key is known (e.g., Mpd_url?key=key XX:XX)
-</blockquote></i>
-<b>🚀 You are not subscribed to any plan yet!</b>
-
-<blockquote><i>💵 Monthly Plan: ₹ 400</blockquote></i>
-<b>If you want to buy membership of the bot, feel free to contact the Bot</b> [🅱🅴🅰🆂🆃👑](https://t.me/chiru52)</b>''')
-# File paths
-SUBSCRIPTION_FILE = "subscription_data.txt"
-
-# Admin ID
+  # Admin ID
 YOUR_ADMIN_ID = 6156388588
-
-# Function to read subscription data
-def read_subscription_data():
-    if not os.path.exists(SUBSCRIPTION_FILE):
-        return []
-    with open(SUBSCRIPTION_FILE, "r") as f:
-        return [line.strip().split(",") for line in f.readlines()]
-
-# Function to write subscription data
-def write_subscription_data(data):
-    with open(SUBSCRIPTION_FILE, "w") as f:
-        for user in data:
-            f.write(",".join(user) + "\n")
-
 # Admin-only decorator
 def admin_only(func):
     async def wrapper(client, message: Message):
@@ -116,14 +93,7 @@ async def id_command(client, message: Message):
 @bot.on_message(filters.command("adduser") & filters.private)
 @admin_only
 async def add_user(client, message: Message):
-    try:
-        _, user_id, expiration_date = message.text.split()
-        subscription_data = read_subscription_data()
-        subscription_data.append([user_id, expiration_date])
-        write_subscription_data(subscription_data)
-        await message.reply_text(f"User {user_id} added with expiration date {expiration_date}.")
-    except ValueError:
-        await message.reply_text("Invalid command format. Use: /adduser <user_id> <expiration_date>")
+  
 
 
 # 2. /removeuser
@@ -132,9 +102,9 @@ async def add_user(client, message: Message):
 async def remove_user(client, message: Message):
     try:
         _, user_id = message.text.split()
-        subscription_data = read_subscription_data()
-        subscription_data = [user for user in subscription_data if user[0] != user_id]
-        write_subscription_data(subscription_data)
+        
+        
+      
         await message.reply_text(f"User {user_id} removed.")
     except ValueError:
         await message.reply_text("Invalid command format. Use: /removeuser <user_id>")
@@ -154,44 +124,20 @@ async def show_users(client, message: Message):
         await message.reply_text("❌ You are not authorized to use this command.")
         return
 
-    subscription_data = read_subscription_data()
     
-    if subscription_data:
-        users_list = "\n".join(
-            [f"{idx + 1}. User ID: `{user[0]}`, Expiration Date: `{user[1]}`" for idx, user in enumerate(subscription_data)]
-        )
-        await message.reply_text(f"**👥 Current Subscribed Users:**\n\n{users_list}")
-    else:
-        await message.reply_text("ℹ️ No users found in the subscription data.")
-
-# 3. /myplan
-@bot.on_message(filters.command("myplan") & filters.private)
-async def my_plan(client, message: Message):
-    user_id = str(message.from_user.id)
-    subscription_data = read_subscription_data()  # Make sure this function is implemented elsewhere
-
     # Define YOUR_ADMIN_ID somewhere in your code
     if user_id == str(YOUR_ADMIN_ID):  # YOUR_ADMIN_ID should be an integer
         await message.reply_text("**✨ You have permanent access!**")
-    elif any(user[0] == user_id for user in subscription_data):  # Assuming subscription_data is a list of [user_id, expiration_date]
-        expiration_date = next(user[1] for user in subscription_data if user[0] == user_id)
-        await message.reply_text(
-            f"**📅 Your Premium Plan Status**\n\n"
-            f"**🆔 User ID**: `{user_id}`\n"
-            f"**⏳ Expiration Date**: `{expiration_date}`\n"
-            f"**🔒 Status**: *Active*"
-        )
-    else:
-        await message.reply_text("**❌ You are not a premium user.**")
+    
+          
+    
 # 4. /add_channel
 @bot.on_message(filters.command("add_channel"))
 async def add_channel(client, message: Message):
     user_id = str(message.from_user.id)
     subscription_data = read_subscription_data()
 
-    if not any(user[0] == user_id for user in subscription_data):
-        await message.reply_text("**❌ You are not a premium user.**")
-        return
+  
 
     try:
         _, channel_id = message.text.split()
@@ -210,11 +156,7 @@ async def add_channel(client, message: Message):
 @bot.on_message(filters.command("remove_channel"))
 async def remove_channel(client, message: Message):
     user_id = str(message.from_user.id)
-    subscription_data = read_subscription_data()
-
-    if not any(user[0] == user_id for user in subscription_data):
-        await message.reply_text("**❌ You are not a premium user.**")
-        return
+    
 
     try:
         _, channel_id = message.text.split()
@@ -268,9 +210,7 @@ async def restart_handler(_, m):
 async def account_login(bot: Client, m: Message):
     #if m.chat.type == "private":
     user_id = str(m.from_user.id)
-    subscription_data = read_subscription_data()
-    if not any(user[0] == user_id for user in subscription_data):
-        await m.reply_text("❌ You are not a premium user. Please upgrade your subscription! 💎")
+    
         return          
     editable = await m.reply_text("**Please Send TXT file for download**")
     input: Message = await bot.listen(editable.chat.id)
